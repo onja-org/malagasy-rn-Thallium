@@ -65,8 +65,8 @@ export default ({
               button={
                 <LanguageSwitcher
                   firstLanguage={LANGUAGE_NAMES.EN}
-                  LeftText="EN"
-                  RightText="MA"
+                  LeftText="MA"
+                  RightText="EN"
                   color="#FFFFFF"
                   iconType=""
                   iconName="swap-horiz"
