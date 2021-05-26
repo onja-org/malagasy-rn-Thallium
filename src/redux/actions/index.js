@@ -4,6 +4,7 @@ import {
   SET_PHRASES,
   SET_LANGUAGE_NAME,
   SET_CURRENT_CATEGORY,
+  SET_THEME_MODE,
 } from '../constants';
 
 // categories actions
@@ -32,5 +33,12 @@ export function setLanguageName(language) {
   return {
     type: SET_LANGUAGE_NAME,
     payload: language,
+  };
+}
+
+export function setThemeMode(theme) {
+  return {
+    type: SET_THEME_MODE,
+    payload: theme,
   };
 }

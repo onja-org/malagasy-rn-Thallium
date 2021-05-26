@@ -19,6 +19,15 @@ import ModeIcon from '../components/ToolButton/assets/mode.svg';
 
 import {LANGUAGE_NAMES} from '../data/dataUtils';
 import {shuffleArray} from '../utils';
+import {
+  getStyle,
+  getFillLearningColor,
+  toggleThemeMode,
+  CONTAINER_STYLE,
+  SECTION_HEADING_TEXT_STYLE,
+  HEADER_STYLE,
+  HEADING_STYLE,
+} from '../Theme/Theme';
 
 export default ({
   //nav provider
@@ -26,6 +35,8 @@ export default ({
 
   categoryPhrases,
   currentCategoryName,
+  themeMode,
+  setThemeMode,
 }) => {
   const [originalPhrases, setOriginalPhrases] = useState([]);
   const [phrasesLeft, setPhrasesLeft] = useState([]);
@@ -96,16 +107,23 @@ export default ({
 
   return (
     <SafeAreaView style={{flex: 1}}>
-      <KeyboardAvoidingView style={{flex: 1}} behavior="padding">
+      <KeyboardAvoidingView
+        style={{flex: 1}}
+        behavior="padding"
+        style={getStyle(CONTAINER_STYLE, themeMode)}>
         <View style={{paddingHorizontal: 35, paddingVertical: 23}}>
-          <View style={styles.header}>
+          <View style={getStyle(HEADER_STYLE, themeMode)}>
             <ToolBar
               button={
                 <ToolButton
                   onPress={() => {
                     navigation.navigate('Home');
                   }}>
-                  <BackIcon width={24} height={24} fill="#FFFFFF" />
+                  <BackIcon
+                    width={24}
+                    height={24}
+                    fill={getFillLearningColor(themeMode)}
+                  />
                 </ToolButton>
               }
             />
@@ -115,7 +133,7 @@ export default ({
                   firstLanguage={LANGUAGE_NAMES.EN}
                   LeftText="MA"
                   RightText="EN"
-                  color="#FFFFFF"
+                  color={getFillLearningColor(themeMode)}
                   iconType=""
                   iconName="swap-horiz"
                   onPress={() => null}
@@ -125,21 +143,29 @@ export default ({
             />
             <ToolBar
               button={
-                <ToolButton onPress={action('clicked-add-button')}>
-                  <ModeIcon width={24} height={24} fill="#FFFFFF" />
+                <ToolButton
+                  onPress={() => toggleThemeMode(setThemeMode, themeMode)}>
+                  <ModeIcon
+                    width={24}
+                    height={24}
+                    fill={getFillLearningColor(themeMode)}
+                  />
                 </ToolButton>
               }
             />
           </View>
-          <View style={styles.heading}>
-            <SectionHeading text="Category: " />
-            <Text>{currentCategoryName}</Text>
+          <View style={getStyle(HEADING_STYLE, themeMode)}>
+            <SectionHeading text="Category: " themeMode={themeMode} />
+            <Text style={getStyle(SECTION_HEADING_TEXT_STYLE, themeMode)}>
+              {currentCategoryName}
+            </Text>
           </View>
-          <View style={styles.heading}>
-            <SectionHeading text="The phrase: " />
+          <View>
+            <SectionHeading text="The phrase: " themeMode={themeMode} />
           </View>
           <View style={{marginBottom: 37}}>
             <Textarea
+              themeMode={themeMode}
               editable={false}
               phrase={
                 shouldReshuffle
@@ -150,8 +176,11 @@ export default ({
           </View>
           {!shouldReshuffle && Boolean(answerOptions && answerOptions.length) && (
             <View>
-              <View style={styles.heading}>
-                <SectionHeading text="Pick a solution: " />
+              <View>
+                <SectionHeading
+                  text="Pick a solution: "
+                  themeMode={themeMode}
+                />
               </View>
               <List
                 lang={LANGUAGE_NAMES.EN}
@@ -163,6 +192,7 @@ export default ({
                 makeAction={selectAnswerCallback}
                 randomPhraseId={currentPhrase.id}
                 disableAllOptions={disableAllOptions}
+                themeMode={themeMode}
               />
             </View>
           )}
@@ -194,14 +224,6 @@ export default ({
 };
 
 const styles = StyleSheet.create({
-  header: {
-    flexDirection: 'row',
-    paddingBottom: 56,
-  },
-  heading: {
-    paddingBottom: 15,
-    flexDirection: 'row',
-  },
   debugList: {
     flexDirection: 'row',
     width: 250,

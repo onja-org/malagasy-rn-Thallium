@@ -7,6 +7,7 @@ export const categoryPhrasesRoot = state => {
 };
 export const randomPhrase = state => state.randomPhrase;
 export const currentCategoryIdRoot = state => state.currentCategoryId;
+export const themeModeRoot = state => state.themeMode;
 
 export const currentCategory = createSelector(
   [currentCategoryIdRoot, categoriesRoot],

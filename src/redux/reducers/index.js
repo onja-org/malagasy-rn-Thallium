@@ -6,7 +6,11 @@ import {
   SET_PHRASES,
   SET_LANGUAGE_NAME,
   SET_CURRENT_CATEGORY,
+  SET_THEME_MODE,
 } from '../constants';
+
+import {lightTheme} from '../../Theme/Theme';
+
 // categories reducer
 function categories(state = [], action) {
   switch (action.type) {
@@ -46,10 +50,24 @@ function nativeLanguage(state = '', action) {
   }
 }
 
+const initialState = {
+  theme: lightTheme,
+};
+
+function themeMode(state = initialState, action) {
+  switch (action.type) {
+    case SET_THEME_MODE:
+      return action.payload;
+    default:
+      return state;
+  }
+}
+
 // combine all of the reducers together
 export default combineReducers({
   currentCategoryId,
   categories,
   categoryPhrases,
   nativeLanguage,
+  themeMode,
 });
