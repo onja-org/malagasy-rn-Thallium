@@ -1,5 +1,4 @@
 import React, {useEffect} from 'react';
-import {action} from '@storybook/addon-actions';
 import {
   LANGUAGE_NAMES,
   getPhrasesForCategoryId,
@@ -24,6 +23,14 @@ import {
   CONTAINER_STYLE,
   HEADER_STYLE,
 } from '../Theme/Theme';
+import {
+  LANGUAGE_DATA,
+  LEARNT_PHRASES_HEADING,
+  LEARN_BUTTON_TEXT,
+  SEEN_PHRASES_HEADING,
+  SELECT_CATEGORY_HEADING,
+  WORDS_AND_PHRASES,
+} from '../translations';
 
 export default ({
   //nav provider
@@ -40,6 +47,7 @@ export default ({
   userPhrases,
   synchronizeStorageToRedux,
   toggleThemeMode,
+  switchLanguages,
 }) => {
   useEffect(() => {
     synchronizeStorageToRedux();
@@ -76,35 +84,19 @@ export default ({
     }
   };
 
+  const usedLanguage = nativeLanguage === LANGUAGE_NAMES.EN;
+
+  const learntButtonText = LANGUAGE_DATA[LEARN_BUTTON_TEXT][nativeLanguage];
+  const wordsAndPhrases = LANGUAGE_DATA[WORDS_AND_PHRASES][nativeLanguage];
+  const selectCatgeoryHeading =
+    LANGUAGE_DATA[SELECT_CATEGORY_HEADING][nativeLanguage];
+  const seenPhrasesHeading =
+    LANGUAGE_DATA[SEEN_PHRASES_HEADING][nativeLanguage];
+  const learntPhrasesHeading =
+    LANGUAGE_DATA[LEARNT_PHRASES_HEADING][nativeLanguage];
+
   return (
     <SafeAreaView style={{flex: 1}}>
-      <KeyboardAvoidingView style={{flex: 1}} behavior="padding">
-        <View>
-          <View style={getStyle(HEADER_STYLE, themeMode)}>
-            <ToolBar
-              button={
-                <ToolButton onPress={openNewTerms}>
-                  <AddIcon width={24} height={24} fill="#FFFFFF" />
-                </ToolButton>
-              }
-            />
-            <ToolBar
-              button={
-                <LanguageSwitcher
-                  firstLanguage={LANGUAGE_NAMES.EN}
-                  LeftText="MA"
-                  RightText="EN"
-                  color="#FFFFFF"
-                  iconType=""
-                  iconName="swap-horiz"
-                  onPress={() => null}
-                  iconSize={24}
-                />
-              }
-            />
-          </View>
-        </View>
-      </KeyboardAvoidingView>
       <KeyboardAvoidingView
         // eslint-disable-next-line react-native/no-inline-styles
         style={{flex: 1}}
@@ -127,13 +119,13 @@ export default ({
             <ToolBar
               button={
                 <LanguageSwitcher
-                  firstLanguage={LANGUAGE_NAMES.EN}
-                  LeftText="MA"
-                  RightText="EN"
+                  firstLanguage={nativeLanguage}
                   color={getFillColor(themeMode)}
+                  LeftText={usedLanguage ? 'MA' : 'EN'}
+                  RightText={usedLanguage ? 'EN' : 'MA'}
                   iconType=""
                   iconName="swap-horiz"
-                  onPress={() => null}
+                  onPress={switchLanguages}
                   iconSize={24}
                 />
               }
@@ -141,7 +133,7 @@ export default ({
 
             <ToolBar
               button={
-                <ToolButton onPress={action('clicked-add-button')}>
+                <ToolButton onPress={() => {}}>
                   <CheckIcon
                     width={24}
                     height={24}
@@ -152,7 +144,7 @@ export default ({
             />
             <ToolBar
               button={
-                <ToolButton onPress={action('clicked-add-button')}>
+                <ToolButton onPress={() => {}}>
                   <CheckAllIcon
                     width={24}
                     height={24}
@@ -173,42 +165,54 @@ export default ({
               }
             />
           </View>
+
           <View>
-            <SectionHeading text="Select a category:" themeMode={themeMode} />
+            <SectionHeading
+              text={`${selectCatgeoryHeading}: `}
+              themeMode={themeMode}
+            />
           </View>
           <List
             lang={nativeLanguage}
             data={categories}
-            text={'Learn'}
+            text={learntButtonText}
             color="#06B6D4"
             iconType="material-community"
             iconName="arrow-right"
             makeAction={openCategoryPhrases}
             themeMode={themeMode}
           />
+
           <View>
-            <SectionHeading themeMode={themeMode} text="Seen phrases:" />
+            <SectionHeading
+              text={`${seenPhrasesHeading}: `}
+              themeMode={themeMode}
+            />
           </View>
           <List
             data={[
               {
                 id: '###seen-phrases###',
-                name: `${seenPhrases?.length} words and phrases`,
+                name: `${seenPhrases?.length} ${wordsAndPhrases}`,
               },
             ]}
-            text={'Learn'}
+            text={learntButtonText}
             color="#06B6D4"
             iconType="material-community"
             iconName="arrow-right"
             makeAction={openSeenPhrases}
             themeMode={themeMode}
           />
+
           <View>
-            <SectionHeading text="Learnt phrases:" themeMode={themeMode} />
+            <SectionHeading
+              text={`${learntPhrasesHeading}: `}
+              themeMode={themeMode}
+            />
           </View>
           <List
-            data={[{id: 2, name: '10 words and phrases'}]}
-            text={'Learn'}
+            data={[{id: 2, name: `10 ${wordsAndPhrases}`}]}
+            text={learntButtonText}
             color="#06B6D4"
             iconType="material-community"
             iconName="arrow-right"

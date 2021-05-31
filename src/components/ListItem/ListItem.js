@@ -8,6 +8,7 @@ import {
   StyleSheet,
   SectionList,
 } from 'react-native';
+import {ANSWER_CORRECT, ANSWER_WRONG, LANGUAGE_DATA} from '../../translations';
 
 import {
   getStyle,
@@ -39,11 +40,14 @@ const RenderDataItem = ({
   const shouldReveal = isSelected || showAsCorrect;
   const shouldDisplayAnswer = showAnswerMode && shouldReveal;
 
+  const answerCorrectText = LANGUAGE_DATA[ANSWER_CORRECT][lang];
+  const answerwrongText = LANGUAGE_DATA[ANSWER_WRONG][lang];
+
   const textToDisplay = !shouldDisplayAnswer
     ? text
     : showAsCorrect
-    ? 'Correct'
-    : 'Wrong';
+    ? answerCorrectText
+    : answerwrongText;
 
   const colorToDisplay = !shouldDisplayAnswer
     ? color

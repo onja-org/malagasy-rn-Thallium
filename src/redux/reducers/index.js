@@ -1,4 +1,5 @@
 import {combineReducers} from 'redux';
+import {LANGUAGE_NAMES} from '../../data/dataUtils';
 // import all of constant case name for the switch
 // in reducers
 import {
@@ -9,6 +10,7 @@ import {
   SET_USER_PHRASES,
   SET_SEEN_PHRASES,
   SET_THEME_MODE,
+  SWITCH_LANGUAGES,
 } from '../constants';
 
 import {lightTheme} from '../../Theme/Theme';
@@ -47,6 +49,10 @@ function nativeLanguage(state = '', action) {
   switch (action.type) {
     case SET_LANGUAGE_NAME:
       return action.payload;
+    case SWITCH_LANGUAGES:
+      return state === LANGUAGE_NAMES.EN
+        ? LANGUAGE_NAMES.MG
+        : LANGUAGE_NAMES.EN;
     default:
       return state;
   }

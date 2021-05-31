@@ -7,3 +7,4 @@ export const SET_USER_PHRASES = 'SET_USER_PHRASES';
 export const SET_SEEN_PHRASES = 'SET_SEEN_PHRASES';
 export const SEEN_PHRASES = '###seen-phrases###';
 export const SET_THEME_MODE = 'SET_SWITCH_THEME';
+export const SWITCH_LANGUAGES = 'SWITCH_LANGUAGES';

@@ -1,13 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, {useState, useEffect, useCallback} from 'react';
 
-import {
-  Text,
-  View,
-  StyleSheet,
-  SafeAreaView,
-  KeyboardAvoidingView,
-} from 'react-native';
+import {Text, View, SafeAreaView, KeyboardAvoidingView} from 'react-native';
 
 import List from '../components/List/List';
 import SectionHeading from '../components/SectionHeading/SectionHeading';
@@ -31,6 +25,17 @@ import {
   HEADER_STYLE,
   HEADING_STYLE,
 } from '../Theme/Theme';
+import {
+  CATEGORY_HEADING,
+  LANGUAGE_DATA,
+  NEXT_BUTTON_TEXT,
+  PHRASE_HEADING,
+  PICK_BUTTON_TEXT,
+  RESHUFFLE_BUTTON_TEXT,
+  SEEN_PHRASES_HEADING,
+  SHOULD_RESHUFFLE_TEXTAREA_CONTENT,
+  SOLUTION_HEADING,
+} from '../translations';
 
 export default ({
   //nav provider
@@ -44,8 +49,12 @@ export default ({
   setCurrentCategory,
   addNewSeenPhrase,
   removeCorrectSeenPhrase,
+
   themeMode,
   toggleThemeMode,
+
+  nativeLanguage,
+  switchLanguages,
 }) => {
   const [originalPhrases, setOriginalPhrases] = useState([]);
   const [phrasesLeft, setPhrasesLeft] = useState([]);
@@ -129,6 +138,21 @@ export default ({
     setAnswerOptionsCallback(originalAll, newPhrase);
   };
 
+  const usedLanguage = nativeLanguage === LANGUAGE_NAMES.EN;
+  const textareaLanguage = usedLanguage ? LANGUAGE_NAMES.MG : LANGUAGE_NAMES.EN;
+
+  const categoryHeadingText = LANGUAGE_DATA[CATEGORY_HEADING][nativeLanguage];
+  const phraseHeading = LANGUAGE_DATA[PHRASE_HEADING][nativeLanguage];
+  const reshuffleButtonText =
+    LANGUAGE_DATA[RESHUFFLE_BUTTON_TEXT][nativeLanguage];
+  const nextButtonText = LANGUAGE_DATA[NEXT_BUTTON_TEXT][nativeLanguage];
+  const solutionHeading = LANGUAGE_DATA[SOLUTION_HEADING][nativeLanguage];
+  const shouldReshuffleTextareaContent =
+    LANGUAGE_DATA[SHOULD_RESHUFFLE_TEXTAREA_CONTENT][nativeLanguage];
+  const pickButtonText = LANGUAGE_DATA[PICK_BUTTON_TEXT][nativeLanguage];
+  const seenPhrasesHeading =
+    LANGUAGE_DATA[SEEN_PHRASES_HEADING][nativeLanguage];
+
   return (
     <SafeAreaView style={{flex: 1}}>
       <KeyboardAvoidingView
@@ -155,13 +179,14 @@ export default ({
             <ToolBar
               button={
                 <LanguageSwitcher
-                  firstLanguage={LANGUAGE_NAMES.EN}
-                  LeftText="MA"
-                  RightText="EN"
                   color={getFillColor(themeMode)}
                   iconType=""
                   iconName="swap-horiz"
-                  onPress={() => {}}
+                  firstLanguage={nativeLanguage}
+                  LeftText={usedLanguage ? 'MA' : 'EN'}
+                  RightText={usedLanguage ? 'EN' : 'MA'}
+                  iconName="swap-horiz"
+                  onPress={switchLanguages}
                   iconSize={24}
                 />
               }
@@ -179,15 +204,15 @@ export default ({
             />
           </View>
           <View style={getStyle(HEADING_STYLE, themeMode)}>
-            <SectionHeading text="Category: " themeMode={themeMode} />
+            <SectionHeading text={categoryHeadingText} themeMode={themeMode} />
             <Text style={getStyle(SECTION_HEADING_TEXT_STYLE, themeMode)}>
               {seenPhrasesCategory
-                ? `Seen phrases ${currentCategoryName}`
+                ? `${seenPhrasesHeading} ${currentCategoryName}`
                 : currentCategoryName}
             </Text>
           </View>
           <View>
-            <SectionHeading text="The phrase: " themeMode={themeMode} />
+            <SectionHeading text={phraseHeading} themeMode={themeMode} />
           </View>
           <View style={{marginBottom: 37}}>
             <Textarea
@@ -195,23 +220,20 @@ export default ({
               editable={false}
               phrase={
                 shouldReshuffle
-                  ? 'You have answered all the questions in this category'
-                  : currentPhrase?.name?.[LANGUAGE_NAMES.MG]
+                  ? shouldReshuffleTextareaContent
+                  : currentPhrase?.name?.[textareaLanguage]
               }
             />
           </View>
           {!shouldReshuffle && Boolean(answerOptions && answerOptions.length) && (
             <View>
               <View>
-                <SectionHeading
-                  text="Pick a solution: "
-                  themeMode={themeMode}
-                />
+                <SectionHeading text={solutionHeading} themeMode={themeMode} />
               </View>
               <List
-                lang={LANGUAGE_NAMES.EN}
+                lang={nativeLanguage}
                 data={answerOptions}
-                text="Pick"
+                text={pickButtonText}
                 color="#06B6D4"
                 iconType="material-community"
                 iconName="arrow-right"
@@ -228,8 +250,8 @@ export default ({
               <NextButton
                 isDisabled={false}
                 textColor="#FFFFFF"
-                text={'Next'}
                 themeMode={themeMode}
+                text={nextButtonText}
                 onPress={nextAnswerCallback}
               />
             </View>
@@ -239,8 +261,8 @@ export default ({
               <NextButton
                 isDisabled={false}
                 textColor="#FFFFFF"
-                text={'Reshuffle'}
                 themeMode={themeMode}
+                text={reshuffleButtonText}
                 onPress={reshuffleCallback}
               />
             </View>
@@ -250,10 +272,3 @@ export default ({
     </SafeAreaView>
   );
 };
-
-const styles = StyleSheet.create({
-  debugList: {
-    flexDirection: 'row',
-    width: 250,
-  },
-});
