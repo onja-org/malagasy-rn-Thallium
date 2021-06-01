@@ -64,7 +64,7 @@ export default ({
   const [currentPhrase, setCurrentPhrase] = useState(null);
   const [answerOptions, setAnswerOptions] = useState([]);
   const [disableAllOptions, setDisableAllOptions] = useState(false);
-  const [shouldReshuffle, setshouldReshuffle] = useState(false);
+  const [shouldReshuffle, setShouldReshuffle] = useState(false);
   const [seenPhrasesCategory, setSeenPhrasesCategory] = useState(false);
   const [learntPhrasesCategory, setLearntPhrasesCategory] = useState(false);
   useEffect(() => {
@@ -78,6 +78,18 @@ export default ({
     const randomWithCorrect = shuffleArray([...randomFromAll, current]);
     setAnswerOptions(randomWithCorrect);
   };
+
+  function setLearntAndSeenPhrasesAnswerOptions() {
+    const currentCategory = categories.find(
+      el =>
+        el.phrasesIds.includes(currentPhrase?.id) ||
+        el.id === currentPhrase?.catId,
+    );
+    if (seenPhrasesCategory || learntPhrasesCategory) {
+      const phrasesForCategory = getPhrasesForCategoryId(currentCategory?.id);
+      setAnswerOptionsCallback(phrasesForCategory, currentPhrase);
+    }
+  }
 
   const selectAnswerCallback = useCallback(
     item => {
@@ -123,7 +135,7 @@ export default ({
 
   const nextAnswerCallback = useCallback(() => {
     if (!Boolean(phrasesLeft.length)) {
-      setshouldReshuffle(true);
+      setShouldReshuffle(true);
       return;
     }
     setDisableAllOptions(false);
@@ -136,10 +148,18 @@ export default ({
   }, [phrasesLeft, originalPhrases]);
 
   const reshuffleCallback = useCallback(() => {
-    setshouldReshuffle(false);
+    setShouldReshuffle(false);
     setDisableAllOptions(false);
     setNewQuestionPhrase(originalPhrases, originalPhrases);
+    //set set Learnt And Seen Phrases Answer Options after reshuffling
+    if (seenPhrasesCategory || learntPhrasesCategory) {
+      setLearntAndSeenPhrasesAnswerOptions();
+    }
   }, [originalPhrases]);
+
+  useEffect(() => {
+    setLearntAndSeenPhrasesAnswerOptions();
+  }, [currentPhrase]);
 
   const setNewQuestionPhrase = (originalAll, leftOriginal) => {
     const phrasesLeftOriginal = shuffleArray(leftOriginal);
@@ -166,18 +186,6 @@ export default ({
     LANGUAGE_DATA[SEEN_PHRASES_HEADING][nativeLanguage];
   const learntPhrasesHeading =
     LANGUAGE_DATA[LEARNT_PHRASES_HEADING][nativeLanguage];
-
-  useEffect(() => {
-    const currentCategory = categories.find(
-      el =>
-        el.phrasesIds.includes(currentPhrase?.id) ||
-        el.id === currentPhrase?.catId,
-    );
-    if (seenPhrasesCategory || learntPhrasesCategory) {
-      const phrasesForCategory = getPhrasesForCategoryId(currentCategory?.id);
-      setAnswerOptionsCallback(phrasesForCategory, currentPhrase);
-    }
-  }, [currentPhrase]);
 
   return (
     <SafeAreaView style={{flex: 1}}>

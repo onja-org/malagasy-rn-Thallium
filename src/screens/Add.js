@@ -83,7 +83,7 @@ export default ({
   const textareaPlaceholder =
     LANGUAGE_DATA[TEXTAREA_PLACEHOLDER_TEXT][nativeLanguage];
   const categoryHeadingText = LANGUAGE_DATA[CATEGORY_HEADING][nativeLanguage];
-  const selectCatgeoryHeading =
+  const selectCategoryHeading =
     LANGUAGE_DATA[SELECT_CATEGORY_HEADING][nativeLanguage];
   const englishPhraseHeading =
     LANGUAGE_DATA[ENGLISH_PHRASE_HEADING][nativeLanguage];
@@ -93,10 +93,11 @@ export default ({
 
   return (
     <KeyboardAwareScrollView
-      // eslint-disable-next-line react/jsx-no-duplicate-props
+      // eslint-disable-next-line eslint-comments/no-unused-disable
       style={getStyle(CONTAINER_STYLE, themeMode)}>
       <SafeAreaView style={{flex: 1}}>
         <KeyboardAvoidingView
+          // eslint-disable-next-line react-native/no-inline-styles
           style={{flex: 1}}
           behavior="padding"
           resetScrollToCoords={{x: 0, y: 0}}
@@ -152,7 +153,8 @@ export default ({
               <SelectDropdown
                 data={categories}
                 ref={dropdownRef}
-                defaultButtonText={selectCatgeoryHeading}
+                defaultButtonText={selectCategoryHeading}
+                // eslint-disable-next-line react-native/no-inline-styles
                 buttonTextStyle={{
                   color: isButtonDisabled ? '#06B6D4' : getTextColor(themeMode),
                   marginRight: -10,
@@ -201,7 +203,6 @@ export default ({
                 editable={true}
                 phrase={malagasyPhrase}
                 onChange={text => setMalagasyPhrase(text)}
-                placeholder="Enter here"
                 themeMode={themeMode}
                 placeholder={textareaPlaceholder}
               />
@@ -222,6 +223,7 @@ export default ({
 
 const WrappedIcon = () => {
   return (
+    // eslint-disable-next-line react-native/no-inline-styles
     <View style={{marginRight: 170}}>
       <DropdownArrowIcon />
     </View>

@@ -85,7 +85,7 @@ export default ({
 
   const learntButtonText = LANGUAGE_DATA[LEARN_BUTTON_TEXT][nativeLanguage];
   const wordsAndPhrases = LANGUAGE_DATA[WORDS_AND_PHRASES][nativeLanguage];
-  const selectCatgeoryHeading =
+  const selectCategoryHeading =
     LANGUAGE_DATA[SELECT_CATEGORY_HEADING][nativeLanguage];
   const seenPhrasesHeading =
     LANGUAGE_DATA[SEEN_PHRASES_HEADING][nativeLanguage];
@@ -174,7 +174,7 @@ export default ({
 
           <View>
             <SectionHeading
-              text={`${selectCatgeoryHeading}: `}
+              text={`${selectCategoryHeading}: `}
               themeMode={themeMode}
             />
           </View>
