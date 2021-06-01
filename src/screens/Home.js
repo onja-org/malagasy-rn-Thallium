@@ -44,19 +44,17 @@ export default ({
   themeMode,
   learntPhrases,
   //actions
-  setCategories,
   setCurrentCategory,
   setPhrases,
   userPhrases,
   synchronizeStorageToRedux,
   toggleThemeMode,
   switchLanguages,
-  getSeenPhrases,
+  synchronizeGetAllCategories,
 }) => {
   useEffect(() => {
     // fetch categories
-    const categories = getAllCategories();
-    setCategories(categories);
+    synchronizeGetAllCategories();
     synchronizeStorageToRedux();
   }, []);
 
