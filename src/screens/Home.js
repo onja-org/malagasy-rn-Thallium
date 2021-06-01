@@ -1,9 +1,5 @@
 import React, {useEffect} from 'react';
-import {
-  LANGUAGE_NAMES,
-  getPhrasesForCategoryId,
-  getAllCategories,
-} from '../data/dataUtils';
+import {LANGUAGE_NAMES, getPhrasesForCategoryId} from '../data/dataUtils';
 
 import {View, SafeAreaView, KeyboardAvoidingView} from 'react-native';
 

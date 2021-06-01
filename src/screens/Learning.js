@@ -13,7 +13,7 @@ import LanguageSwitcher from '../components/LanguageSwitcher/LanguageSwitcher';
 import BackIcon from '../components/ToolButton/assets/back.svg';
 import ModeIcon from '../components/ToolButton/assets/mode.svg';
 
-import {LANGUAGE_NAMES} from '../data/dataUtils';
+import {getPhrasesForCategoryId, LANGUAGE_NAMES} from '../data/dataUtils';
 import {shuffleArray} from '../utils';
 
 import {
@@ -83,11 +83,11 @@ export default ({
     item => {
       const itemId = item.id;
       if (itemId === currentPhrase.id) {
-        addNewLearntPhrase(item);
-        removeCorrectSeenPhrase(item);
+        addNewLearntPhrase(currentPhrase);
+        removeCorrectSeenPhrase(currentPhrase);
       } else {
-        addNewSeenPhrase(item);
-        removeWrongLearntPhrase(item);
+        addNewSeenPhrase(currentPhrase);
+        removeWrongLearntPhrase(currentPhrase);
       }
 
       setDisableAllOptions(true);
@@ -166,6 +166,18 @@ export default ({
     LANGUAGE_DATA[SEEN_PHRASES_HEADING][nativeLanguage];
   const learntPhrasesHeading =
     LANGUAGE_DATA[LEARNT_PHRASES_HEADING][nativeLanguage];
+
+  useEffect(() => {
+    const currentCategory = categories.find(
+      el =>
+        el.phrasesIds.includes(currentPhrase?.id) ||
+        el.id === currentPhrase?.catId,
+    );
+    if (seenPhrasesCategory || learntPhrasesCategory) {
+      const phrasesForCategory = getPhrasesForCategoryId(currentCategory?.id);
+      setAnswerOptionsCallback(phrasesForCategory, currentPhrase);
+    }
+  }, [currentPhrase]);
 
   return (
     <SafeAreaView style={{flex: 1}}>
