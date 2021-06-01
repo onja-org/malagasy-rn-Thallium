@@ -11,6 +11,7 @@ import {
   SET_SEEN_PHRASES,
   SET_THEME_MODE,
   SWITCH_LANGUAGES,
+  SET_LEARNT_PHRASES,
 } from '../constants';
 
 import {lightTheme} from '../../Theme/Theme';
@@ -88,6 +89,14 @@ function themeMode(state = initialState, action) {
       return state;
   }
 }
+function learntPhrases(state = [], action) {
+  switch (action.type) {
+    case SET_LEARNT_PHRASES:
+      return action.payload;
+    default:
+      return state;
+  }
+}
 
 // combine all of the reducers together
 export default combineReducers({
@@ -98,4 +107,5 @@ export default combineReducers({
   userPhrases,
   seenPhrases,
   themeMode,
+  learntPhrases,
 });

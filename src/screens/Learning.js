@@ -16,7 +16,6 @@ import ModeIcon from '../components/ToolButton/assets/mode.svg';
 import {LANGUAGE_NAMES} from '../data/dataUtils';
 import {shuffleArray} from '../utils';
 
-import {SEEN_PHRASES} from '../redux/constants';
 import {
   getStyle,
   getFillColor,
@@ -35,7 +34,10 @@ import {
   SEEN_PHRASES_HEADING,
   SHOULD_RESHUFFLE_TEXTAREA_CONTENT,
   SOLUTION_HEADING,
+  LEARNT_PHRASES_HEADING,
 } from '../translations';
+
+import {LEARNT_PHRASES_ID, SEEN_PHRASES_ID} from '../redux/constants';
 
 export default ({
   //nav provider
@@ -43,11 +45,11 @@ export default ({
   categories,
   categoryPhrases,
   currentCategoryName,
-  seenPhrases,
   currentCategoryId,
   //actions
   setCurrentCategory,
   addNewSeenPhrase,
+  addNewLearntPhrase,
   removeCorrectSeenPhrase,
 
   themeMode,
@@ -55,6 +57,7 @@ export default ({
 
   nativeLanguage,
   switchLanguages,
+  removeWrongLearntPhrase,
 }) => {
   const [originalPhrases, setOriginalPhrases] = useState([]);
   const [phrasesLeft, setPhrasesLeft] = useState([]);
@@ -63,6 +66,7 @@ export default ({
   const [disableAllOptions, setDisableAllOptions] = useState(false);
   const [shouldReshuffle, setshouldReshuffle] = useState(false);
   const [seenPhrasesCategory, setSeenPhrasesCategory] = useState(false);
+  const [learntPhrasesCategory, setLearntPhrasesCategory] = useState(false);
   useEffect(() => {
     setOriginalPhrases(categoryPhrases);
     setNewQuestionPhrase(categoryPhrases, categoryPhrases);
@@ -79,10 +83,11 @@ export default ({
     item => {
       const itemId = item.id;
       if (itemId === currentPhrase.id) {
-        //TODO: add to learned
+        addNewLearntPhrase(item);
         removeCorrectSeenPhrase(item);
-      } else if (!seenPhrases.some(el => el.id.includes(itemId))) {
+      } else {
         addNewSeenPhrase(item);
+        removeWrongLearntPhrase(item);
       }
 
       setDisableAllOptions(true);
@@ -97,15 +102,22 @@ export default ({
   );
 
   useEffect(() => {
-    if (currentCategoryId === SEEN_PHRASES) {
+    if (currentCategoryId === SEEN_PHRASES_ID) {
       setSeenPhrasesCategory(true);
+    }
+
+    if (currentCategoryId === LEARNT_PHRASES_ID) {
+      setLearntPhrasesCategory(true);
     }
   }, [currentCategoryId]);
 
   useEffect(() => {
-    const currentCategoryId = categories.find(el =>
-      el.phrasesIds.includes(currentPhrase?.id),
+    const currentCategoryId = categories.find(
+      el =>
+        el.phrasesIds.includes(currentPhrase?.id) ||
+        el.id === currentPhrase?.catId,
     );
+
     setCurrentCategory(currentCategoryId ? currentCategoryId.id : null);
   }, [currentPhrase]);
 
@@ -152,6 +164,8 @@ export default ({
   const pickButtonText = LANGUAGE_DATA[PICK_BUTTON_TEXT][nativeLanguage];
   const seenPhrasesHeading =
     LANGUAGE_DATA[SEEN_PHRASES_HEADING][nativeLanguage];
+  const learntPhrasesHeading =
+    LANGUAGE_DATA[LEARNT_PHRASES_HEADING][nativeLanguage];
 
   return (
     <SafeAreaView style={{flex: 1}}>
@@ -185,7 +199,6 @@ export default ({
                   firstLanguage={nativeLanguage}
                   LeftText={usedLanguage ? 'MA' : 'EN'}
                   RightText={usedLanguage ? 'EN' : 'MA'}
-                  iconName="swap-horiz"
                   onPress={switchLanguages}
                   iconSize={24}
                 />
@@ -207,7 +220,9 @@ export default ({
             <SectionHeading text={categoryHeadingText} themeMode={themeMode} />
             <Text style={getStyle(SECTION_HEADING_TEXT_STYLE, themeMode)}>
               {seenPhrasesCategory
-                ? `${seenPhrasesHeading} ${currentCategoryName}`
+                ? `${seenPhrasesHeading} - ${currentCategoryName}`
+                : learntPhrasesCategory
+                ? `${learntPhrasesHeading} - ${currentCategoryName}`
                 : currentCategoryName}
             </Text>
           </View>
