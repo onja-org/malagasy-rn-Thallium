@@ -12,7 +12,6 @@ import {
   categoryPhrasesRoot,
   currentCategoryName,
   seenPhrasesRoot,
-  openSeenPhrasesRoot,
   currentCategory,
   currentCategoryIdRoot,
 } from '../redux/selectors';
@@ -22,7 +21,6 @@ function mapStateToProps(state) {
     categoryPhrases: categoryPhrasesRoot(state),
     currentCategoryName: currentCategoryName(state),
     seenPhrases: seenPhrasesRoot(state),
-    openSeenPhrases: openSeenPhrasesRoot(state),
     categories: categoriesRoot(state),
     currentCategory: currentCategory(state),
     currentCategoryId: currentCategoryIdRoot(state),
