@@ -7,6 +7,7 @@ import {
   SafeAreaView,
   KeyboardAvoidingView,
 } from 'react-native';
+
 import List from '../components/List/List';
 import SectionHeading from '../components/SectionHeading/SectionHeading';
 import ToolBar from '../components/ToolBar/ToolBar';
@@ -19,13 +20,20 @@ import ModeIcon from '../components/ToolButton/assets/mode.svg';
 
 import {LANGUAGE_NAMES} from '../data/dataUtils';
 import {shuffleArray} from '../utils';
+import {SEEN_PHRASES} from '../redux/constants';
 
 export default ({
   //nav provider
   navigation,
-
+  categories,
   categoryPhrases,
   currentCategoryName,
+  seenPhrases,
+  currentCategoryId,
+  //actions
+  setCurrentCategory,
+  addNewSeenPhrase,
+  removeCorrectSeenPhrase,
 }) => {
   const [originalPhrases, setOriginalPhrases] = useState([]);
   const [phrasesLeft, setPhrasesLeft] = useState([]);
@@ -33,7 +41,7 @@ export default ({
   const [answerOptions, setAnswerOptions] = useState([]);
   const [disableAllOptions, setDisableAllOptions] = useState(false);
   const [shouldReshuffle, setshouldReshuffle] = useState(false);
-
+  const [seenPhrasesCategory, setSeenPhrasesCategory] = useState(false);
   useEffect(() => {
     setOriginalPhrases(categoryPhrases);
     setNewQuestionPhrase(categoryPhrases, categoryPhrases);
@@ -48,10 +56,12 @@ export default ({
 
   const selectAnswerCallback = useCallback(
     item => {
-      if (item.id === currentPhrase.id) {
-        // TODO add to learned
-      } else {
-        // TODO add to seen
+      const itemId = item.id;
+      if (itemId === currentPhrase.id) {
+        //TODO: add to learned
+        removeCorrectSeenPhrase(item);
+      } else if (!seenPhrases.some(el => el.id.includes(itemId))) {
+        addNewSeenPhrase(item);
       }
 
       setDisableAllOptions(true);
@@ -64,6 +74,20 @@ export default ({
     },
     [currentPhrase, setDisableAllOptions, answerOptions],
   );
+
+  useEffect(() => {
+    if (currentCategoryId === SEEN_PHRASES) {
+      setSeenPhrasesCategory(true);
+    }
+  }, [currentCategoryId]);
+
+  useEffect(() => {
+    const currentCategoryId = categories.find(el =>
+      el.phrasesIds.includes(currentPhrase?.id),
+    );
+    setCurrentCategory(currentCategoryId ? currentCategoryId.id : null);
+  }, [currentPhrase]);
+
   const nextAnswerCallback = useCallback(() => {
     if (!Boolean(phrasesLeft.length)) {
       setshouldReshuffle(true);
@@ -90,7 +114,6 @@ export default ({
     const newPhrase = phrasesLeftCopy.shift();
     setPhrasesLeft(phrasesLeftCopy);
     setCurrentPhrase(newPhrase);
-
     setAnswerOptionsCallback(originalAll, newPhrase);
   };
 
@@ -133,7 +156,11 @@ export default ({
           </View>
           <View style={styles.heading}>
             <SectionHeading text="Category: " />
-            <Text>{currentCategoryName}</Text>
+            <Text>
+              {seenPhrasesCategory
+                ? `Seen phrases ${currentCategoryName}`
+                : currentCategoryName}
+            </Text>
           </View>
           <View style={styles.heading}>
             <SectionHeading text="The phrase: " />
