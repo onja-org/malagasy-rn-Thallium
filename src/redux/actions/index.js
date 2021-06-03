@@ -1,11 +1,18 @@
 // // import all of the constants from contants folder
-import {getData, NEW_PHRASES_KEY, storeData} from '../../utils/storage';
+import {
+  getData,
+  NEW_PHRASES_KEY,
+  SEEN_PHRASES_KEY,
+  storeData,
+} from '../../utils/storage';
+
 import {
   SET_CATEGORIES,
   SET_PHRASES,
   SET_LANGUAGE_NAME,
   SET_CURRENT_CATEGORY,
   SET_USER_PHRASES,
+  SET_SEEN_PHRASES,
 } from '../constants';
 
 // categories actions
@@ -56,7 +63,39 @@ export function addNewPhrase(phrase) {
     }
     await storeData(NEW_PHRASES_KEY, dataToStore);
     dispatch(setUserPhrases(dataToStore));
+  };
+}
 
+export function setSeenPhrases(seenPhrases) {
+  return {
+    type: SET_SEEN_PHRASES,
+    payload: seenPhrases,
+  };
+}
+
+export function addNewSeenPhrase(phrase) {
+  return async dispatch => {
+    const storedSeenPhrases = await getData(SEEN_PHRASES_KEY);
+    let dataToStore = null;
+    if (!storedSeenPhrases) {
+      dataToStore = [phrase];
+    } else {
+      dataToStore = [...storedSeenPhrases, phrase];
+    }
+    await storeData(SEEN_PHRASES_KEY, dataToStore);
+
+    dispatch(setSeenPhrases(dataToStore));
+    return Promise.resolve();
+  };
+}
+
+export function removeCorrectSeenPhrase(phrase) {
+  return async dispatch => {
+    const storedSeenPhrases = await getData(SEEN_PHRASES_KEY);
+    let dataToStore = storedSeenPhrases.filter(el => el.id !== phrase.id);
+    await storeData(SEEN_PHRASES_KEY, dataToStore);
+
+    dispatch(setSeenPhrases(dataToStore));
     return Promise.resolve();
   };
 }
@@ -64,8 +103,12 @@ export function addNewPhrase(phrase) {
 export function synchronizeStorageToRedux() {
   return async dispatch => {
     const storedPhrases = await getData(NEW_PHRASES_KEY);
+    const storedSeenPhrases = await getData(SEEN_PHRASES_KEY);
     if (storedPhrases) {
       dispatch(setUserPhrases(storedPhrases));
+    }
+    if (storedSeenPhrases) {
+      dispatch(setSeenPhrases(storedSeenPhrases));
     }
     return Promise.resolve();
   };

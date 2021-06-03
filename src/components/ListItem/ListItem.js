@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 
 export const Separator = () => <View style={styles.separator} />;
+
 const RenderDataItem = ({
   item,
   index,

@@ -30,6 +30,7 @@ export default ({
   //state props
   categories,
   nativeLanguage,
+  seenPhrases,
   //actions
   setCategories,
   setCurrentCategory,
@@ -42,6 +43,7 @@ export default ({
     // fetch categories
     const categories = getAllCategories();
     setCategories(categories);
+    synchronizeStorageToRedux();
   }, []);
 
   const openCategoryPhrases = item => {
@@ -62,6 +64,13 @@ export default ({
 
   const openNewTerms = () => {
     navigation.navigate('Add');
+  };
+  const openSeenPhrases = item => {
+    if (seenPhrases.length) {
+      navigation.navigate('Learn');
+      setPhrases(seenPhrases);
+      setCurrentCategory(item.id);
+    }
   };
 
   return (
@@ -128,12 +137,17 @@ export default ({
             <SectionHeading text="Seen phrases:" />
           </View>
           <List
-            data={[{id: 1, name: '35 words and phrases'}]}
+            data={[
+              {
+                id: '###seen-phrases###',
+                name: `${seenPhrases?.length} words and phrases`,
+              },
+            ]}
             text={'Learn'}
             color="#06B6D4"
             iconType="material-community"
             iconName="arrow-right"
-            makeAction={() => {}}
+            makeAction={openSeenPhrases}
           />
           <View style={styles.heading}>
             <SectionHeading text="Learnt phrases:" />
