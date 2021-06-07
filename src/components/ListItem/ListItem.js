@@ -9,7 +9,15 @@ import {
   SectionList,
 } from 'react-native';
 
-export const Separator = () => <View style={styles.separator} />;
+import {
+  getStyle,
+  LIST_ITEM_TEXT_STYLE,
+  LIST_SEPARATOR_STYLE,
+} from '../../Theme/Theme';
+
+export const Separator = ({themeMode}) => (
+  <View style={getStyle(LIST_SEPARATOR_STYLE, themeMode)} />
+);
 
 const RenderDataItem = ({
   item,
@@ -22,6 +30,7 @@ const RenderDataItem = ({
   lang,
   randomPhraseId,
   disableAllOptions,
+  themeMode,
 }) => {
   const showAnswerMode = disableAllOptions === true;
   const isCorrectAnswer = item.id === randomPhraseId;
@@ -60,7 +69,10 @@ const RenderDataItem = ({
       style={styles.item}
       onPress={() => makeAction(item, index)}>
       <View>
-        <Text numberOfLines={1} ellipsizeMode={'tail'} style={styles.text}>
+        <Text
+          numberOfLines={1}
+          ellipsizeMode={'tail'}
+          style={getStyle(LIST_ITEM_TEXT_STYLE, themeMode)}>
           {lang ? item?.name?.[lang] : item.name}
         </Text>
       </View>
@@ -84,6 +96,7 @@ export default function ListItem({
   lang,
   randomPhraseId,
   disableAllOptions,
+  themeMode,
 }) {
   return (
     <SafeAreaView>
@@ -101,10 +114,11 @@ export default function ListItem({
             lang={lang}
             randomPhraseId={randomPhraseId}
             disableAllOptions={disableAllOptions}
+            themeMode={themeMode}
           />
         )}
         keyExtractor={item => item.id}
-        ItemSeparatorComponent={() => <Separator />}
+        ItemSeparatorComponent={() => <Separator themeMode={themeMode} />}
       />
     </SafeAreaView>
   );
@@ -120,18 +134,9 @@ const styles = StyleSheet.create({
     paddingRight: 20,
     paddingVertical: 17,
   },
-  text: {
-    fontFamily: 'Inter',
-    fontStyle: 'normal',
-    fontWeight: 'normal',
-    fontSize: 16,
-    lineHeight: 19,
-    color: '#111827',
-    maxWidth: 320,
-  },
   separator: {
     flex: 1,
     height: 1,
-    backgroundColor: '#E5E5E5',
+    backgroundColor: '#E5E5E5', //#1F232C
   },
 });

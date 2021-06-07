@@ -6,6 +6,7 @@ import {
   setPhrases,
   setSeenPhrases,
   synchronizeStorageToRedux,
+  toggleThemeMode,
 } from '../redux/actions';
 import {
   categoriesRoot,
@@ -13,6 +14,7 @@ import {
   userPhrasesRoot,
   seenPhrasesRoot,
   currentCategory,
+  themeModeRoot,
 } from '../redux/selectors';
 
 function mapStateToProps(state) {
@@ -22,6 +24,7 @@ function mapStateToProps(state) {
     userPhrases: userPhrasesRoot(state),
     seenPhrases: seenPhrasesRoot(state),
     currentCategory: currentCategory(state),
+    themeMode: themeModeRoot(state),
   };
 }
 const mapDispatchToProps = {
@@ -30,6 +33,7 @@ const mapDispatchToProps = {
   setPhrases,
   setSeenPhrases,
   synchronizeStorageToRedux,
+  toggleThemeMode,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home);

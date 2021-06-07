@@ -1,4 +1,5 @@
 // // import all of the constants from contants folder
+import {DARK_MODE, LIGHT_MODE} from '../../Theme/Theme';
 import {
   getData,
   NEW_PHRASES_KEY,
@@ -13,6 +14,7 @@ import {
   SET_CURRENT_CATEGORY,
   SET_USER_PHRASES,
   SET_SEEN_PHRASES,
+  SET_THEME_MODE,
 } from '../constants';
 
 // categories actions
@@ -113,3 +115,19 @@ export function synchronizeStorageToRedux() {
     return Promise.resolve();
   };
 }
+
+export function setThemeMode(theme) {
+  return {
+    type: SET_THEME_MODE,
+    payload: theme,
+  };
+}
+
+export const toggleThemeMode = themeMode => {
+  const newMode = themeMode === LIGHT_MODE ? DARK_MODE : LIGHT_MODE;
+
+  return dispatch => {
+    dispatch(setThemeMode(newMode));
+    return Promise.resolve();
+  };
+};
