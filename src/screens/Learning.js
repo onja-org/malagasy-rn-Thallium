@@ -1,5 +1,6 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, {useState, useEffect, useCallback} from 'react';
-import {action} from '@storybook/addon-actions';
+
 import {
   Text,
   View,
@@ -20,7 +21,16 @@ import ModeIcon from '../components/ToolButton/assets/mode.svg';
 
 import {LANGUAGE_NAMES} from '../data/dataUtils';
 import {shuffleArray} from '../utils';
+
 import {SEEN_PHRASES} from '../redux/constants';
+import {
+  getStyle,
+  getFillColor,
+  CONTAINER_STYLE,
+  SECTION_HEADING_TEXT_STYLE,
+  HEADER_STYLE,
+  HEADING_STYLE,
+} from '../Theme/Theme';
 
 export default ({
   //nav provider
@@ -34,6 +44,8 @@ export default ({
   setCurrentCategory,
   addNewSeenPhrase,
   removeCorrectSeenPhrase,
+  themeMode,
+  toggleThemeMode,
 }) => {
   const [originalPhrases, setOriginalPhrases] = useState([]);
   const [phrasesLeft, setPhrasesLeft] = useState([]);
@@ -119,16 +131,24 @@ export default ({
 
   return (
     <SafeAreaView style={{flex: 1}}>
-      <KeyboardAvoidingView style={{flex: 1}} behavior="padding">
-        <View style={{paddingHorizontal: 35, paddingVertical: 23}}>
-          <View style={styles.header}>
+      <KeyboardAvoidingView
+        style={{flex: 1}}
+        behavior="padding"
+        // eslint-disable-next-line react/jsx-no-duplicate-props
+        style={getStyle(CONTAINER_STYLE, themeMode)}>
+        <View>
+          <View style={getStyle(HEADER_STYLE, themeMode)}>
             <ToolBar
               button={
                 <ToolButton
                   onPress={() => {
                     navigation.navigate('Home');
                   }}>
-                  <BackIcon width={24} height={24} fill="#FFFFFF" />
+                  <BackIcon
+                    width={24}
+                    height={24}
+                    fill={getFillColor(themeMode)}
+                  />
                 </ToolButton>
               }
             />
@@ -138,35 +158,40 @@ export default ({
                   firstLanguage={LANGUAGE_NAMES.EN}
                   LeftText="MA"
                   RightText="EN"
-                  color="#FFFFFF"
+                  color={getFillColor(themeMode)}
                   iconType=""
                   iconName="swap-horiz"
-                  onPress={() => null}
+                  onPress={() => {}}
                   iconSize={24}
                 />
               }
             />
             <ToolBar
               button={
-                <ToolButton onPress={action('clicked-add-button')}>
-                  <ModeIcon width={24} height={24} fill="#FFFFFF" />
+                <ToolButton onPress={() => toggleThemeMode(themeMode)}>
+                  <ModeIcon
+                    width={24}
+                    height={24}
+                    fill={getFillColor(themeMode)}
+                  />
                 </ToolButton>
               }
             />
           </View>
-          <View style={styles.heading}>
-            <SectionHeading text="Category: " />
-            <Text>
+          <View style={getStyle(HEADING_STYLE, themeMode)}>
+            <SectionHeading text="Category: " themeMode={themeMode} />
+            <Text style={getStyle(SECTION_HEADING_TEXT_STYLE, themeMode)}>
               {seenPhrasesCategory
                 ? `Seen phrases ${currentCategoryName}`
                 : currentCategoryName}
             </Text>
           </View>
-          <View style={styles.heading}>
-            <SectionHeading text="The phrase: " />
+          <View>
+            <SectionHeading text="The phrase: " themeMode={themeMode} />
           </View>
           <View style={{marginBottom: 37}}>
             <Textarea
+              themeMode={themeMode}
               editable={false}
               phrase={
                 shouldReshuffle
@@ -177,8 +202,11 @@ export default ({
           </View>
           {!shouldReshuffle && Boolean(answerOptions && answerOptions.length) && (
             <View>
-              <View style={styles.heading}>
-                <SectionHeading text="Pick a solution: " />
+              <View>
+                <SectionHeading
+                  text="Pick a solution: "
+                  themeMode={themeMode}
+                />
               </View>
               <List
                 lang={LANGUAGE_NAMES.EN}
@@ -190,6 +218,7 @@ export default ({
                 makeAction={selectAnswerCallback}
                 randomPhraseId={currentPhrase.id}
                 disableAllOptions={disableAllOptions}
+                themeMode={themeMode}
               />
             </View>
           )}
@@ -200,6 +229,7 @@ export default ({
                 isDisabled={false}
                 textColor="#FFFFFF"
                 text={'Next'}
+                themeMode={themeMode}
                 onPress={nextAnswerCallback}
               />
             </View>
@@ -210,6 +240,7 @@ export default ({
                 isDisabled={false}
                 textColor="#FFFFFF"
                 text={'Reshuffle'}
+                themeMode={themeMode}
                 onPress={reshuffleCallback}
               />
             </View>
@@ -221,14 +252,6 @@ export default ({
 };
 
 const styles = StyleSheet.create({
-  header: {
-    flexDirection: 'row',
-    paddingBottom: 56,
-  },
-  heading: {
-    paddingBottom: 15,
-    flexDirection: 'row',
-  },
   debugList: {
     flexDirection: 'row',
     width: 250,

@@ -6,7 +6,6 @@ import {
   StyleSheet,
 } from 'react-native';
 
-import {action} from '@storybook/addon-actions';
 import {KeyboardAwareScrollView} from '@codler/react-native-keyboard-aware-scroll-view';
 import SelectDropdown from 'react-native-select-dropdown';
 
@@ -20,8 +19,22 @@ import Textarea from '../components/Textarea/Textarea';
 import Button from '../components/NextButton/NextButton';
 import {generateId} from '../utils';
 import DropdownArrowIcon from '../icons/select-dropdown-arrow.svg';
+import {
+  CONTAINER_STYLE,
+  getStyle,
+  HEADER_STYLE,
+  HEADING_STYLE,
+  getFillColor,
+} from '../Theme/Theme';
 
-export default ({categories, navigation, addNewPhrase, nativeLanguage}) => {
+export default ({
+  categories,
+  navigation,
+  addNewPhrase,
+  nativeLanguage,
+  themeMode,
+  toggleThemeMode,
+}) => {
   const [englishPhrase, setEnglishPhrase] = useState('');
   const [malagasyPhrase, setMalagasyPhrase] = useState('');
   const [selectedCategoryValue, setSelectedCategoryValue] = useState('');
@@ -48,22 +61,28 @@ export default ({categories, navigation, addNewPhrase, nativeLanguage}) => {
   };
 
   return (
-    <KeyboardAwareScrollView>
+    <KeyboardAwareScrollView
+      // eslint-disable-next-line react/jsx-no-duplicate-props
+      style={getStyle(CONTAINER_STYLE, themeMode)}>
       <SafeAreaView style={{flex: 1}}>
         <KeyboardAvoidingView
           style={{flex: 1}}
           behavior="padding"
           resetScrollToCoords={{x: 0, y: 0}}
           scrollEnabled={false}>
-          <View style={{paddingHorizontal: 35, paddingVertical: 23}}>
-            <View style={styles.header}>
+          <View>
+            <View style={getStyle(HEADER_STYLE, themeMode)}>
               <ToolBar
                 button={
                   <ToolButton
                     onPress={() => {
                       navigation.navigate('Home');
                     }}>
-                    <BackIcon width={24} height={24} fill="#FFFFFF" />
+                    <BackIcon
+                      width={24}
+                      height={24}
+                      fill={getFillColor(themeMode)}
+                    />
                   </ToolButton>
                 }
               />
@@ -73,7 +92,7 @@ export default ({categories, navigation, addNewPhrase, nativeLanguage}) => {
                     firstLanguage={nativeLanguage}
                     LeftText="MA"
                     RightText="EN"
-                    color="#FFFFFF"
+                    color={getFillColor(themeMode)}
                     iconType=""
                     iconName="swap-horiz"
                     onPress={() => null}
@@ -83,14 +102,18 @@ export default ({categories, navigation, addNewPhrase, nativeLanguage}) => {
               />
               <ToolBar
                 button={
-                  <ToolButton onPress={action('clicked-add-button')}>
-                    <ModeIcon width={24} height={24} fill="#FFFFFF" />
+                  <ToolButton onPress={() => toggleThemeMode(themeMode)}>
+                    <ModeIcon
+                      width={24}
+                      height={24}
+                      fill={getFillColor(themeMode)}
+                    />
                   </ToolButton>
                 }
               />
             </View>
-            <View style={styles.heading}>
-              <SectionHeading text="Category: " />
+            <View style={getStyle(HEADING_STYLE, themeMode)}>
+              <SectionHeading themeMode={themeMode} text="Category: " />
               <SelectDropdown
                 data={categories}
                 ref={dropdownRef}
@@ -117,31 +140,39 @@ export default ({categories, navigation, addNewPhrase, nativeLanguage}) => {
             </View>
             <View style={styles.englishField}>
               <View style={styles.inputHeading}>
-                <SectionHeading text="The phrase in English: " />
+                <SectionHeading
+                  themeMode={themeMode}
+                  text="The phrase in English: "
+                />
               </View>
               <Textarea
                 editable={true}
                 phrase={englishPhrase}
                 onChange={text => setEnglishPhrase(text)}
                 placeholder="Enter here"
+                themeMode={themeMode}
               />
             </View>
             <View style={styles.malagasyField}>
               <View style={styles.inputHeading}>
-                <SectionHeading text="The phrase in Malagasy: " />
+                <SectionHeading
+                  themeMode={themeMode}
+                  text="The phrase in Malagasy: "
+                />
               </View>
               <Textarea
                 editable={true}
                 phrase={malagasyPhrase}
                 onChange={text => setMalagasyPhrase(text)}
                 placeholder="Enter here"
+                themeMode={themeMode}
               />
             </View>
             <Button
               isDisabled={isButtonDisabled}
-              textColor={isButtonDisabled ? '#06B6D4' : '#FFFFFF'}
               text="Add"
               onPress={addPhrasesToCategory}
+              themeMode={themeMode}
             />
           </View>
         </KeyboardAvoidingView>
@@ -164,6 +195,7 @@ const styles = StyleSheet.create({
     marginRight: -15,
     flex: 1,
     alignItems: 'center',
+    marginTop: -15,
   },
   dropDownPicker: {
     height: '70%',

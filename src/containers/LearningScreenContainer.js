@@ -6,16 +6,17 @@ import {
   setCurrentCategory,
   addNewSeenPhrase,
   removeCorrectSeenPhrase,
+  toggleThemeMode,
 } from '../redux/actions';
 import {
   categoriesRoot,
-  categoryPhrasesRoot,
-  currentCategoryName,
   seenPhrasesRoot,
   currentCategory,
   currentCategoryIdRoot,
+  categoryPhrasesRoot,
+  currentCategoryName,
+  themeModeRoot,
 } from '../redux/selectors';
-
 function mapStateToProps(state) {
   return {
     categoryPhrases: categoryPhrasesRoot(state),
@@ -24,6 +25,7 @@ function mapStateToProps(state) {
     categories: categoriesRoot(state),
     currentCategory: currentCategory(state),
     currentCategoryId: currentCategoryIdRoot(state),
+    themeMode: themeModeRoot(state),
   };
 }
 const mapDispatchToProps = {
@@ -32,6 +34,7 @@ const mapDispatchToProps = {
   setCurrentCategory,
   addNewSeenPhrase,
   removeCorrectSeenPhrase,
+  toggleThemeMode,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Learning);

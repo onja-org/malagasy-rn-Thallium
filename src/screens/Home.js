@@ -6,12 +6,7 @@ import {
   getAllCategories,
 } from '../data/dataUtils';
 
-import {
-  View,
-  StyleSheet,
-  SafeAreaView,
-  KeyboardAvoidingView,
-} from 'react-native';
+import {View, SafeAreaView, KeyboardAvoidingView} from 'react-native';
 
 import List from '../components/List/List';
 import SectionHeading from '../components/SectionHeading/SectionHeading';
@@ -23,6 +18,12 @@ import AddIcon from '../components/ToolButton/assets/add.svg';
 import CheckIcon from '../components/ToolButton/assets/check.svg';
 import CheckAllIcon from '../components/ToolButton/assets/check-all.svg';
 import ModeIcon from '../components/ToolButton/assets/mode.svg';
+import {
+  getStyle,
+  getFillColor,
+  CONTAINER_STYLE,
+  HEADER_STYLE,
+} from '../Theme/Theme';
 
 export default ({
   //nav provider
@@ -31,12 +32,14 @@ export default ({
   categories,
   nativeLanguage,
   seenPhrases,
+  themeMode,
   //actions
   setCategories,
   setCurrentCategory,
   setPhrases,
   userPhrases,
   synchronizeStorageToRedux,
+  toggleThemeMode,
 }) => {
   useEffect(() => {
     synchronizeStorageToRedux();
@@ -76,8 +79,8 @@ export default ({
   return (
     <SafeAreaView style={{flex: 1}}>
       <KeyboardAvoidingView style={{flex: 1}} behavior="padding">
-        <View style={{paddingHorizontal: 35, paddingVertical: 23}}>
-          <View style={styles.header}>
+        <View>
+          <View style={getStyle(HEADER_STYLE, themeMode)}>
             <ToolBar
               button={
                 <ToolButton onPress={openNewTerms}>
@@ -99,30 +102,79 @@ export default ({
                 />
               }
             />
+          </View>
+        </View>
+      </KeyboardAvoidingView>
+      <KeyboardAvoidingView
+        // eslint-disable-next-line react-native/no-inline-styles
+        style={{flex: 1}}
+        behavior="padding"
+        // eslint-disable-next-line react/jsx-no-duplicate-props
+        style={getStyle(CONTAINER_STYLE, themeMode)}>
+        <SafeAreaView>
+          <View style={getStyle(HEADER_STYLE, themeMode)}>
+            <ToolBar
+              button={
+                <ToolButton onPress={openNewTerms}>
+                  <AddIcon
+                    width={24}
+                    height={24}
+                    fill={getFillColor(themeMode)}
+                  />
+                </ToolButton>
+              }
+            />
+            <ToolBar
+              button={
+                <LanguageSwitcher
+                  firstLanguage={LANGUAGE_NAMES.EN}
+                  LeftText="MA"
+                  RightText="EN"
+                  color={getFillColor(themeMode)}
+                  iconType=""
+                  iconName="swap-horiz"
+                  onPress={() => null}
+                  iconSize={24}
+                />
+              }
+            />
+
             <ToolBar
               button={
                 <ToolButton onPress={action('clicked-add-button')}>
-                  <CheckIcon width={24} height={24} fill="#FFFFFF" />
+                  <CheckIcon
+                    width={24}
+                    height={24}
+                    fill={getFillColor(themeMode)}
+                  />
                 </ToolButton>
               }
             />
             <ToolBar
               button={
                 <ToolButton onPress={action('clicked-add-button')}>
-                  <CheckAllIcon width={24} height={24} fill="#FFFFFF" />
+                  <CheckAllIcon
+                    width={24}
+                    height={24}
+                    fill={getFillColor(themeMode)}
+                  />
                 </ToolButton>
               }
             />
             <ToolBar
               button={
-                <ToolButton onPress={action('clicked-add-button')}>
-                  <ModeIcon width={24} height={24} fill="#FFFFFF" />
+                <ToolButton onPress={() => toggleThemeMode(themeMode)}>
+                  <ModeIcon
+                    width={24}
+                    height={24}
+                    fill={getFillColor(themeMode)}
+                  />
                 </ToolButton>
               }
             />
           </View>
-          <View style={styles.heading}>
-            <SectionHeading text="Select a category:" />
+          <View>
+            <SectionHeading text="Select a category:" themeMode={themeMode} />
           </View>
           <List
             lang={nativeLanguage}
@@ -132,9 +184,10 @@ export default ({
             iconType="material-community"
             iconName="arrow-right"
             makeAction={openCategoryPhrases}
+            themeMode={themeMode}
           />
-          <View style={styles.heading}>
-            <SectionHeading text="Seen phrases:" />
+          <View>
+            <SectionHeading themeMode={themeMode} text="Seen phrases:" />
           </View>
           <List
             data={[
@@ -148,9 +201,10 @@ export default ({
             iconType="material-community"
             iconName="arrow-right"
             makeAction={openSeenPhrases}
+            themeMode={themeMode}
           />
-          <View style={styles.heading}>
-            <SectionHeading text="Learnt phrases:" />
+          <View>
+            <SectionHeading text="Learnt phrases:" themeMode={themeMode} />
           </View>
           <List
             data={[{id: 2, name: '10 words and phrases'}]}
@@ -159,19 +213,10 @@ export default ({
             iconType="material-community"
             iconName="arrow-right"
             makeAction={() => {}}
+            themeMode={themeMode}
           />
-        </View>
+        </SafeAreaView>
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
 };
-
-const styles = StyleSheet.create({
-  header: {
-    flexDirection: 'row',
-    paddingBottom: 56,
-  },
-  heading: {
-    paddingBottom: 15,
-  },
-});

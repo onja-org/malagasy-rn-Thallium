@@ -8,7 +8,10 @@ import {
   SET_CURRENT_CATEGORY,
   SET_USER_PHRASES,
   SET_SEEN_PHRASES,
+  SET_THEME_MODE,
 } from '../constants';
+
+import {lightTheme} from '../../Theme/Theme';
 
 // categories reducer
 function categories(state = [], action) {
@@ -58,10 +61,22 @@ function userPhrases(state = [], action) {
       return state;
   }
 }
+const initialState = {
+  theme: lightTheme,
+};
 
 function seenPhrases(state = [], action) {
   switch (action.type) {
     case SET_SEEN_PHRASES:
+      return action.payload;
+    default:
+      return state;
+  }
+}
+
+function themeMode(state = initialState, action) {
+  switch (action.type) {
+    case SET_THEME_MODE:
       return action.payload;
     default:
       return state;
@@ -76,4 +91,5 @@ export default combineReducers({
   nativeLanguage,
   userPhrases,
   seenPhrases,
+  themeMode,
 });
