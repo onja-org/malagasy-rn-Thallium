@@ -7,6 +7,7 @@ import {
   setSeenPhrases,
   synchronizeStorageToRedux,
   toggleThemeMode,
+  switchLanguages,
 } from '../redux/actions';
 import {
   categoriesRoot,
@@ -34,6 +35,7 @@ const mapDispatchToProps = {
   setSeenPhrases,
   synchronizeStorageToRedux,
   toggleThemeMode,
+  switchLanguages,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home);

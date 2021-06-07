@@ -5,7 +5,8 @@ import {
   themeModeRoot,
 } from '../redux/selectors';
 import Add from '../screens/Add';
-import {addNewPhrase, toggleThemeMode} from '../redux/actions';
+
+import {addNewPhrase, switchLanguages, toggleThemeMode} from '../redux/actions';
 
 function mapStateToProps(state) {
   return {
@@ -17,6 +18,7 @@ function mapStateToProps(state) {
 const mapDispatchToProps = {
   addNewPhrase,
   toggleThemeMode,
+  switchLanguages,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Add);

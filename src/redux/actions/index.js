@@ -14,6 +14,7 @@ import {
   SET_CURRENT_CATEGORY,
   SET_USER_PHRASES,
   SET_SEEN_PHRASES,
+  SWITCH_LANGUAGES,
   SET_THEME_MODE,
 } from '../constants';
 
@@ -50,6 +51,12 @@ export function setUserPhrases(phrases) {
   return {
     type: SET_USER_PHRASES,
     payload: phrases,
+  };
+}
+
+export function switchLanguages() {
+  return {
+    type: SWITCH_LANGUAGES,
   };
 }
 

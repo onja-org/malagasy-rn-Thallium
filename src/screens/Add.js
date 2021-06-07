@@ -19,6 +19,7 @@ import Textarea from '../components/Textarea/Textarea';
 import Button from '../components/NextButton/NextButton';
 import {generateId} from '../utils';
 import DropdownArrowIcon from '../icons/select-dropdown-arrow.svg';
+
 import {
   CONTAINER_STYLE,
   getStyle,
@@ -27,13 +28,27 @@ import {
   getFillColor,
 } from '../Theme/Theme';
 
+import {LANGUAGE_NAMES} from '../data/dataUtils';
+import {
+  ADD_BUTTON_TEXT,
+  CATEGORY_HEADING,
+  ENGLISH_PHRASE_HEADING,
+  LANGUAGE_DATA,
+  MALAGASY_PHRASE_HEADING,
+  SELECT_CATEGORY_HEADING,
+  TEXTAREA_PLACEHOLDER_TEXT,
+} from '../translations';
+
 export default ({
   categories,
   navigation,
   addNewPhrase,
   nativeLanguage,
+
   themeMode,
   toggleThemeMode,
+
+  switchLanguages,
 }) => {
   const [englishPhrase, setEnglishPhrase] = useState('');
   const [malagasyPhrase, setMalagasyPhrase] = useState('');
@@ -59,6 +74,19 @@ export default ({
     setMalagasyPhrase('');
     dropdownRef.current.reset();
   };
+
+  const usedLanguage = nativeLanguage === LANGUAGE_NAMES.EN;
+
+  const textareaPlaceholder =
+    LANGUAGE_DATA[TEXTAREA_PLACEHOLDER_TEXT][nativeLanguage];
+  const categoryHeadingText = LANGUAGE_DATA[CATEGORY_HEADING][nativeLanguage];
+  const selectCatgeoryHeading =
+    LANGUAGE_DATA[SELECT_CATEGORY_HEADING][nativeLanguage];
+  const englishPhraseHeading =
+    LANGUAGE_DATA[ENGLISH_PHRASE_HEADING][nativeLanguage];
+  const malagasyPhraseHeading =
+    LANGUAGE_DATA[MALAGASY_PHRASE_HEADING][nativeLanguage];
+  const addButtonText = LANGUAGE_DATA[ADD_BUTTON_TEXT][nativeLanguage];
 
   return (
     <KeyboardAwareScrollView
@@ -90,12 +118,12 @@ export default ({
                 button={
                   <LanguageSwitcher
                     firstLanguage={nativeLanguage}
-                    LeftText="MA"
-                    RightText="EN"
                     color={getFillColor(themeMode)}
+                    LeftText={usedLanguage ? 'MA' : 'EN'}
+                    RightText={usedLanguage ? 'EN' : 'MA'}
                     iconType=""
                     iconName="swap-horiz"
-                    onPress={() => null}
+                    onPress={switchLanguages}
                     iconSize={24}
                   />
                 }
@@ -113,11 +141,15 @@ export default ({
               />
             </View>
             <View style={getStyle(HEADING_STYLE, themeMode)}>
-              <SectionHeading themeMode={themeMode} text="Category: " />
+              <SectionHeading
+                themeMode={themeMode}
+                text={categoryHeadingText}
+              />
+              <View />
               <SelectDropdown
                 data={categories}
                 ref={dropdownRef}
-                defaultButtonText="Select Category"
+                defaultButtonText={selectCatgeoryHeading}
                 buttonTextStyle={{
                   color: isButtonDisabled ? '#06B6D4' : '#111827',
                   marginRight: -10,
@@ -142,22 +174,22 @@ export default ({
               <View style={styles.inputHeading}>
                 <SectionHeading
                   themeMode={themeMode}
-                  text="The phrase in English: "
+                  text={englishPhraseHeading}
                 />
               </View>
               <Textarea
                 editable={true}
                 phrase={englishPhrase}
                 onChange={text => setEnglishPhrase(text)}
-                placeholder="Enter here"
                 themeMode={themeMode}
+                placeholder={textareaPlaceholder}
               />
             </View>
             <View style={styles.malagasyField}>
               <View style={styles.inputHeading}>
                 <SectionHeading
                   themeMode={themeMode}
-                  text="The phrase in Malagasy: "
+                  text={malagasyPhraseHeading}
                 />
               </View>
               <Textarea
@@ -166,11 +198,13 @@ export default ({
                 onChange={text => setMalagasyPhrase(text)}
                 placeholder="Enter here"
                 themeMode={themeMode}
+                placeholder={textareaPlaceholder}
               />
             </View>
             <Button
               isDisabled={isButtonDisabled}
-              text="Add"
+              textColor={isButtonDisabled ? '#06B6D4' : '#FFFFFF'}
+              text={addButtonText}
               onPress={addPhrasesToCategory}
               themeMode={themeMode}
             />
