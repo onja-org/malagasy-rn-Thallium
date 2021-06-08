@@ -1,4 +1,5 @@
 // // import all of the constants from contants folder
+import {getAllCategories} from '../../data/dataUtils';
 import {DARK_MODE, LIGHT_MODE} from '../../Theme/Theme';
 // import all of the constants from constants folder
 import {
@@ -60,6 +61,14 @@ export function setUserPhrases(phrases) {
 export function switchLanguages() {
   return {
     type: SWITCH_LANGUAGES,
+  };
+}
+
+export function synchronizeGetAllCategories() {
+  return async dispatch => {
+    const categories = await getAllCategories();
+    dispatch(setCategories(categories));
+    return Promise.resolve();
   };
 }
 
@@ -164,6 +173,7 @@ export function synchronizeStorageToRedux() {
     if (storedLearntPhrases) {
       dispatch(setLearntPhrases(storedLearntPhrases));
     }
+
     return Promise.resolve();
   };
 }
