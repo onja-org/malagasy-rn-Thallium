@@ -32,7 +32,7 @@ import {
   WORDS_AND_PHRASES,
 } from '../translations';
 
-import {SEEN_PHRASES_ID} from '../redux/constants';
+import {SEEN_PHRASES_ID, LEARNT_PHRASES_ID} from '../redux/constants';
 
 export default ({
   //nav provider
@@ -155,7 +155,8 @@ export default ({
             />
             <ToolBar
               button={
-                <ToolButton onPress={() => {}}>
+                <ToolButton
+                  onPress={() => openLearntPhrases({id: LEARNT_PHRASES_ID})}>
                   <CheckAllIcon
                     width={24}
                     height={24}
