@@ -26,6 +26,9 @@ import {
   HEADER_STYLE,
   HEADING_STYLE,
   getFillColor,
+  getTextColor,
+  DROPDOWN_PICKER_STYLE,
+  DROPDOWN_ROW_STYLE,
 } from '../Theme/Theme';
 
 import {LANGUAGE_NAMES} from '../data/dataUtils';
@@ -151,16 +154,18 @@ export default ({
                 ref={dropdownRef}
                 defaultButtonText={selectCatgeoryHeading}
                 buttonTextStyle={{
-                  color: isButtonDisabled ? '#06B6D4' : '#111827',
+                  color: isButtonDisabled ? '#06B6D4' : getTextColor(themeMode),
                   marginRight: -10,
                   marginTop: -2,
                   maxWidth: isButtonDisabled ? '43%' : '100%',
                   textAlign: 'left',
                 }}
                 dropdownIconPosition="right"
-                dropdownStyle={styles.dropDownPicker}
+                dropdownStyle={getStyle(DROPDOWN_PICKER_STYLE, themeMode)}
                 buttonStyle={[styles.pickerContainer]}
                 renderDropdownIcon={isButtonDisabled ? WrappedIcon : null}
+                rowTextStyle={{color: getTextColor(themeMode)}}
+                rowStyle={getStyle(DROPDOWN_ROW_STYLE, themeMode)}
                 onSelect={selectedItem =>
                   setSelectedCategoryValue(selectedItem.id)
                 }
@@ -230,11 +235,6 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     marginTop: -15,
-  },
-  dropDownPicker: {
-    height: '70%',
-    paddingBottom: 10,
-    paddingHorizontal: 10,
   },
   header: {
     flexDirection: 'row',
