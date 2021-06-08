@@ -5,9 +5,12 @@ import {
   setCategories,
   setCurrentCategory,
   addNewSeenPhrase,
+  addNewLearntPhrase,
   removeCorrectSeenPhrase,
   toggleThemeMode,
   switchLanguages,
+  setLearntPhrases,
+  removeWrongLearntPhrase,
 } from '../redux/actions';
 import {
   categoriesRoot,
@@ -18,12 +21,14 @@ import {
   currentCategoryName,
   themeModeRoot,
   nativeLanguageRoot,
+  learntPhrasesRoot,
 } from '../redux/selectors';
 function mapStateToProps(state) {
   return {
     categoryPhrases: categoryPhrasesRoot(state),
     currentCategoryName: currentCategoryName(state),
     seenPhrases: seenPhrasesRoot(state),
+    learntPhrases: learntPhrasesRoot(state),
     categories: categoriesRoot(state),
     currentCategory: currentCategory(state),
     currentCategoryId: currentCategoryIdRoot(state),
@@ -38,9 +43,12 @@ const mapDispatchToProps = {
   setCategories,
   setCurrentCategory,
   addNewSeenPhrase,
+  addNewLearntPhrase,
   removeCorrectSeenPhrase,
   toggleThemeMode,
   switchLanguages,
+  setLearntPhrases,
+  removeWrongLearntPhrase,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Learning);

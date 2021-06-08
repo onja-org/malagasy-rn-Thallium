@@ -40,6 +40,7 @@ export default ({
   nativeLanguage,
   seenPhrases,
   themeMode,
+  learntPhrases,
   //actions
   setCategories,
   setCurrentCategory,
@@ -50,7 +51,6 @@ export default ({
   switchLanguages,
 }) => {
   useEffect(() => {
-    synchronizeStorageToRedux();
     // fetch categories
     const categories = getAllCategories();
     setCategories(categories);
@@ -94,6 +94,13 @@ export default ({
     LANGUAGE_DATA[SEEN_PHRASES_HEADING][nativeLanguage];
   const learntPhrasesHeading =
     LANGUAGE_DATA[LEARNT_PHRASES_HEADING][nativeLanguage];
+  const openLearntPhrases = item => {
+    if (learntPhrases.length) {
+      navigation.navigate('Learn');
+      setPhrases(learntPhrases);
+      setCurrentCategory(item.id);
+    }
+  };
 
   return (
     <SafeAreaView style={{flex: 1}}>
@@ -211,13 +218,18 @@ export default ({
             />
           </View>
           <List
-            data={[{id: 2, name: `10 ${wordsAndPhrases}`}]}
+            data={[
+              {
+                id: '###learnt-phrases###',
+                name: `${learntPhrases?.length} ${wordsAndPhrases}`,
+              },
+            ]}
             text={learntButtonText}
             color="#06B6D4"
             iconType="material-community"
-            iconName="arrow-right"
-            makeAction={() => {}}
             themeMode={themeMode}
+            iconName="arrow-right"
+            makeAction={openLearntPhrases}
           />
         </SafeAreaView>
       </KeyboardAvoidingView>

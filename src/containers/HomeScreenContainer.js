@@ -8,12 +8,14 @@ import {
   synchronizeStorageToRedux,
   toggleThemeMode,
   switchLanguages,
+  setLearntPhrases,
 } from '../redux/actions';
 import {
   categoriesRoot,
   nativeLanguageRoot,
   userPhrasesRoot,
   seenPhrasesRoot,
+  learntPhrasesRoot,
   currentCategory,
   themeModeRoot,
 } from '../redux/selectors';
@@ -24,6 +26,7 @@ function mapStateToProps(state) {
     nativeLanguage: nativeLanguageRoot(state),
     userPhrases: userPhrasesRoot(state),
     seenPhrases: seenPhrasesRoot(state),
+    learntPhrases: learntPhrasesRoot(state),
     currentCategory: currentCategory(state),
     themeMode: themeModeRoot(state),
   };
@@ -33,6 +36,7 @@ const mapDispatchToProps = {
   setCurrentCategory,
   setPhrases,
   setSeenPhrases,
+  setLearntPhrases,
   synchronizeStorageToRedux,
   toggleThemeMode,
   switchLanguages,
