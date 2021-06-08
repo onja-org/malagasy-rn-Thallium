@@ -32,6 +32,8 @@ import {
   WORDS_AND_PHRASES,
 } from '../translations';
 
+import {SEEN_PHRASES_ID} from '../redux/constants';
+
 export default ({
   //nav provider
   navigation,
@@ -49,6 +51,7 @@ export default ({
   synchronizeStorageToRedux,
   toggleThemeMode,
   switchLanguages,
+  getSeenPhrases,
 }) => {
   useEffect(() => {
     // fetch categories
@@ -140,7 +143,8 @@ export default ({
 
             <ToolBar
               button={
-                <ToolButton onPress={() => {}}>
+                <ToolButton
+                  onPress={() => openSeenPhrases({id: SEEN_PHRASES_ID})}>
                   <CheckIcon
                     width={24}
                     height={24}
