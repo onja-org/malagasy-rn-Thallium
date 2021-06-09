@@ -106,8 +106,8 @@ export const getStyle = (stylekey, theme) => {
       alignSelf: 'center',
       textAlignVertical: 'center',
       borderWidth: 1,
-      borderColor: '#06B6D4',
-      backgroundColor: theme === LIGHT_MODE ? '#FFF' : '#06B6D4',
+      borderColor: theme === LIGHT_MODE ? '#06B6D4' : '#111827',
+      backgroundColor: theme === LIGHT_MODE ? '#FFF' : '#111827',
       alignItems: 'center',
       borderRadius: 30,
       paddingHorizontal: 27,
@@ -123,7 +123,17 @@ export const getStyle = (stylekey, theme) => {
       lineHeight: 19,
     },
     [BUTTON_DISABLED_TEXT_COLOR_STYLE]: {
-      color: theme === LIGHT_MODE ? '#111827' : '#FFF',
+      color: theme === LIGHT_MODE ? '#06B6D4' : '#FFF',
+    },
+    [DROPDOWN_PICKER_STYLE]: {
+      height: '70%',
+      backgroundColor: theme === LIGHT_MODE ? '#FFF' : '#111827',
+    },
+    [DROPDOWN_ROW_STYLE]: {
+      borderBottomColor: theme === LIGHT_MODE ? '#E5E5E5' : '#1F232C',
+      borderColor: theme === LIGHT_MODE ? '#E5E5E5' : '#1F232C',
+      borderStyle: 'solid',
+      borderWidth: 1,
     },
   });
   return styles[stylekey];
@@ -164,3 +174,5 @@ export const DISABLED_BUTTON_STYLE = 'disabledButtonStyle';
 export const BUTTON_TEXT_COLOR_STYLE = 'buttonTextColorStyle';
 export const BUTTON_ADD_STYLE = 'buttonAddStyle';
 export const BUTTON_DISABLED_TEXT_COLOR_STYLE = 'buttonDisabledTextColorStyle';
+export const DROPDOWN_PICKER_STYLE = 'dropdownPickerStyle';
+export const DROPDOWN_ROW_STYLE = 'dropdownTextStyle';
